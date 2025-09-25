@@ -8,8 +8,25 @@ public class PatientService
         Console.WriteLine("\n--- Adding patient ---");
         Console.Write("Name: ");
         string name = Console.ReadLine()!;
-        Console.Write("Age: ");
-        int age = int.Parse(Console.ReadLine()!);
+
+        int age = 0;
+        bool ageValided = false;
+
+        while (!ageValided)
+        {
+            Console.Write("Age: ");
+            string ageInput = Console.ReadLine()!;
+            try 
+            {
+                age = int.Parse(ageInput);
+                ageValided = true;
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Invalid age. Please enter a valid number.");
+            }
+        }
+        
         Console.Write("Symptom: ");
         string symptom = Console.ReadLine()!;
 
@@ -39,6 +56,13 @@ public class PatientService
         Console.WriteLine("\n--- Search Patient ---");
         Console.Write("Enter patient name: ");
         string name = Console.ReadLine() ?? "";
+
+        if (string.IsNullOrEmpty(name))
+        {
+            Console.WriteLine("Please enter a valid name.");
+            return;
+        }
+        
         // Busca el paciente por nombre
         var results = patients
             .Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
