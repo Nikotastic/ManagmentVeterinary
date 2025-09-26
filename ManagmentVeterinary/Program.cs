@@ -4,8 +4,6 @@
 List<Patient> patients = new List<Patient>();
 // Declaración del servicio donde tiene los metodos 
 PatientService service = new PatientService();
-// Declaracion de lista de los perros
-List<Pet> Pets  = new List<Pet>();
 // Agregando diccionario para conectar paciente y mascota por ID
 Dictionary<int, Patient> patientDictionary = new Dictionary<int, Patient>();
 
@@ -20,7 +18,9 @@ do
 2. List patients
 3. Search patient
 4. Add pet to patient
-5. Exit");
+5. Delete pet to patient
+6. Update pet to patient
+7. Exit");
     option = Console.ReadLine()!;
 
     switch (option)
@@ -29,13 +29,15 @@ do
         case "2": service.ListPatients(patients); break;   
         case "3":  service.SearchPatientByName(patients); break;
         case "4":  service.AddPet(patientDictionary); break;
-        case "5":
+        case "5":  service.RemovePet(patientDictionary); break; 
+        case "6":  service.UpdatePet(patientDictionary); break; 
+        case "7":
             Console.WriteLine("Goodbye");
             break;
         default:
             Console.WriteLine("Invalid option");
             break;
     }
-} while (option != "5");
+} while (option != "7");
 
 
