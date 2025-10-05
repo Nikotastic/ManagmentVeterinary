@@ -1,5 +1,5 @@
 ﻿using ManagmentVeterinary.Models;
-
+using ManagmentVeterinary.Menu; 
 
 // Declaración de la lista de los pacientes 
 List<Patient> patients = new List<Patient>();
@@ -23,24 +23,26 @@ do
 4. Add pet to patient
 5. Delete pet to patient
 6. Update pet to patient
-7. Exit");
+7. LINQ Queries (Filters, Sort, Group, etc.)
+8. Exit");
     option = Console.ReadLine()!;
 
     switch (option)
     {
         case "1": service.RegisterPatient(patients, patientDictionary); break;
         case "2": service.ListPatients(patients); break;   
-        case "3":  service.SearchPatientByName(patients); break;
-        case "4":  petService.AddPet(patientDictionary); break;
-        case "5":  petService.RemovePet(patientDictionary); break; 
-        case "6":  petService.UpdatePet(patientDictionary); break; 
-        case "7":
+        case "3": service.SearchPatientByName(patients); break;
+        case "4": petService.AddPet(patientDictionary); break;
+        case "5": petService.RemovePet(patientDictionary); break; 
+        case "6": petService.UpdatePet(patientDictionary); break; 
+        case "7": MenuLinq.ShowMenuLinq(patients); break;
+        case "8":
             Console.WriteLine("Goodbye");
             break;
         default:
             Console.WriteLine("Invalid option");
             break;
     }
-} while (option != "7");
+} while (option != "8");
 
 
