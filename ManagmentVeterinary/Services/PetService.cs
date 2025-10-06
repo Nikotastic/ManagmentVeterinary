@@ -38,14 +38,8 @@ public class PetService
         Console.WriteLine("\n--- Delete Pet ---");
         Console.Write("Enter patient ID: ");
         string patientIdInput = Console.ReadLine()!;
-        if (!int.TryParse(patientIdInput, out int patientId))
-        {
-            Console.WriteLine("Invalid patient ID. Please enter a number.");
-            return;
-        }
-
+        int patientId = int.Parse(patientIdInput);
         // Validacion del paciente
-        
 
         if (!patientDictionary.ContainsKey(patientId))
         {
