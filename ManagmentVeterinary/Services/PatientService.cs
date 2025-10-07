@@ -1,9 +1,66 @@
-namespace ManagmentVeterinary.Models;
+using ManagmentVeterinary.Interfaces;
+using ManagmentVeterinary.Interfaces.Repositories;
+using ManagmentVeterinary.Models;
+using ManagmentVeterinary.Repositories;
 
-public class PatientService
+namespace ManagmentVeterinary.Services;
+
+public class PatientService : IPatientService
 {
+    private readonly IPatientRepository _patientRepository;
+
+    public PatientService()
+    {
+        _patientRepository = new PatientRepository();
+    }
+
+    public void RegisterPatient(Patient patient)
+    {
+        if (patient == null)
+            throw new ArgumentNullException(nameof(patient));
+
+        _patientRepository.Add(patient);
+    }
+
+    public List<Patient> GetAllPatients()
+    {
+        return _patientRepository.GetAll().ToList();
+    }
+
+    public Patient? GetPatientById(int id)
+    {
+        return _patientRepository.GetAll().FirstOrDefault(p => p.PatientId == id);
+    }
+
+    public void UpdatePatient(Patient patient)
+    {
+        if (patient == null)
+            throw new ArgumentNullException(nameof(patient));
+
+        var existingPatient = GetPatientById(patient.PatientId);
+        if (existingPatient == null)
+            throw new InvalidOperationException("Paciente no encontrado");
+
+        // Aquí iría la lógica de actualización en el repositorio
+        // Por ahora solo actualizamos en memoria ya que el repositorio no tiene método de actualización
+        existingPatient.Name = patient.Name;
+        existingPatient.Age = patient.Age;
+        existingPatient.Phone = patient.Phone;
+    }
+
+    public void DeletePatient(int id)
+    {
+        var patient = GetPatientById(id);
+        if (patient == null)
+            throw new InvalidOperationException("Paciente no encontrado");
+
+        // Aquí iría la lógica de eliminación en el repositorio
+        // Por ahora solo eliminamos de la lista en memoria
+        _patientRepository.Delete(id);
+    }
+
     // Metodo para registar paciente
-    public void RegisterPatient(List<Patient> patients, Dictionary<int, Patient> patientDictionary)
+    public void RegisterPatient()
     {
         Console.WriteLine("\n--- Adding patient ---");
         Console.Write("Name: ");
@@ -16,37 +73,37 @@ public class PatientService
         while (!ageValided)
         {
             Console.Write("Age: ");
-            string ageInput = Console.ReadLine()!;
-            try 
+            if (int.TryParse(Console.ReadLine(), out age))
             {
-                age = int.Parse(ageInput);
                 ageValided = true; // ya fue validada
             }
-            catch (Exception)
+            else
             {
                 Console.WriteLine("Invalid age. Please enter a valid number.");
             }
         }
-        
+
         Console.Write("Phone: ");
         string phone = Console.ReadLine()!;
 
-        Patient data = new Patient(name, age, phone);
-        patients.Add(data);
-        patientDictionary.Add(data.PatientId, data); // Agregamos el paciente al diccionario
-        
-        Console.WriteLine($"Patient added successfully with ID: {data.PatientId}");
+        var patient = new Patient(name, age, phone);
+        _patientRepository.Add(patient);
+
+        Console.WriteLine($"Patient added successfully with ID: {patient.PatientId}");
     }
 
     // Metodo para listar pacientes
-    public void ListPatients(List<Patient> patients)
+    public void ListPatients()
     {
         Console.WriteLine("\n--- Listing patients ---");
-        if (patients.Count == 0) 
+        var patients = _patientRepository.GetAll().ToList();
+
+        if (patients.Count == 0)
         {
             Console.WriteLine("No patients registered yet.");
             return;
         }
+
         // Mostramos los pacientes
         foreach (var p in patients)
         {
@@ -66,10 +123,10 @@ public class PatientService
                 Console.WriteLine("No pets registered for this patient.");
             }
         }
-        
+
     }
     // Metodo para buscar paciente por nombre
-    public void SearchPatientByName(List<Patient> patients)
+    public void SearchPatientByName()
     {
         Console.WriteLine("\n--- Search Patient ---");
         Console.Write("Enter patient name: ");
@@ -80,20 +137,18 @@ public class PatientService
             Console.WriteLine("Please enter a valid name.");
             return;
         }
-        
-        // Busca el paciente por nombre
-        var results = patients
-            .Where(p => p.Name.Contains(name, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-        
+
+        var patients = _patientRepository.FindByName(name).ToList();
+
         // Mostramos los resultados
-        Console.WriteLine($"Found {results.Count} patient(s):");
-        if (results.Count == 0)
+        Console.WriteLine($"Found {patients.Count} patient(s):");
+        if (patients.Count == 0)
         {
-            Console.WriteLine("️No patient found with that name.");
+            Console.WriteLine("No patient found with that name.");
             return;
         }
-        foreach (var patient in results)
+
+        foreach (var patient in patients)
         {
             Console.WriteLine($"- Name: {patient.Name}, Age: {patient.Age}, Phone: {patient.Phone}");
         }

@@ -1,113 +1,129 @@
-﻿namespace ManagmentVeterinary.Models;
+﻿using ManagmentVeterinary.Interfaces.Repositories;
+using ManagmentVeterinary.Models;
+using ManagmentVeterinary.Repositories;
+
+namespace ManagmentVeterinary.Services;
 
 public class PetService
 {
+    private readonly IPetRepository _petRepository;
+    private readonly IPatientRepository _patientRepository;
+
+    public PetService()
+    {
+        _petRepository = new PetRepository();
+        _patientRepository = new PatientRepository();
+    }
+
     // Metodo para agregar mascota a paciente
-    
-    public void AddPet(Dictionary<int, Patient> patientDictionary)
+    public void AddPet()
     {
         Console.WriteLine("\n--- Add Pet ---");
         Console.Write("Enter patient ID: ");
-        string patientIdInput = Console.ReadLine()!;
-        int patientId = int.Parse(patientIdInput);
+        if (!int.TryParse(Console.ReadLine(), out int patientId))
+        {
+            Console.WriteLine("Invalid patient ID.");
+            return;
+        }
 
-        if (!patientDictionary.ContainsKey(patientId))
+        var patient = _patientRepository.GetById(patientId);
+        if (patient == null)
         {
             Console.WriteLine("Patient not found.");
             return;
         }
+
         Console.Write("Enter pet name: ");
         string name = Console.ReadLine()!;
         Console.Write("Enter pet species: ");
         string species = Console.ReadLine()!;
+        
         Console.Write("Enter pet age: ");
-        string ageInput = Console.ReadLine()!;
-        int age = int.Parse(ageInput);
+        if (!int.TryParse(Console.ReadLine(), out int age))
+        {
+            Console.WriteLine("Invalid age.");
+            return;
+        }
+        
         Console.Write("Symptom: ");
         string symptom = Console.ReadLine()!;
 
-        // Creamos la mascota y la agregamos al paciente
-        Pet pet = new Pet(name, species, age, symptom);
-        patientDictionary[patientId].Pets.Add(pet);
+        var pet = new Pet(name, species, age, symptom);
+        _petRepository.Add(patientId, pet);
         
-        Console.WriteLine($"Pet added successfully");
+        Console.WriteLine("Pet added successfully");
     }
     // Metodo para eliminar mascota de paciente
-    public void RemovePet(Dictionary<int, Patient> patientDictionary)
+    public void RemovePet()
     {
         Console.WriteLine("\n--- Delete Pet ---");
         Console.Write("Enter patient ID: ");
-        string patientIdInput = Console.ReadLine()!;
-        int patientId = int.Parse(patientIdInput);
-        // Validacion del paciente
+        if (!int.TryParse(Console.ReadLine(), out int patientId))
+        {
+            Console.WriteLine("Invalid patient ID.");
+            return;
+        }
 
-        if (!patientDictionary.ContainsKey(patientId))
+        if (_patientRepository.GetById(patientId) == null)
         {
             Console.WriteLine("Patient not found.");
             return;
         }
+
         Console.Write("Enter pet name: ");
         string name = Console.ReadLine()!;
-        // Validacion de la mascota
-        // Buscamos el ID del paciente y luego accedemos a la lista de mascotas y verifica si existe 
-        if (patientDictionary[patientId].Pets.Any(p => p.Name == name))
-        {
-            // Removemos la primera mascota de la lista de mascotas del paciente 
-            patientDictionary[patientId].Pets.Remove(patientDictionary[patientId].Pets.First(p => p.Name == name));
-            Console.WriteLine($"Pet {name} deleted successfully");
-        }
-        else
-        {
-            Console.WriteLine($"Pet {name} not found for patient {patientId}");
-        }
+
+        _petRepository.Delete(patientId, name);
+        Console.WriteLine($"Pet {name} deleted successfully");
     }
 
-    public void UpdatePet(Dictionary<int, Patient> patientDictionary)
+    public void UpdatePet()
     {
         Console.WriteLine("\n--- Update Pet ---");
         Console.Write("Enter patient ID: ");
-        string patientIdInput = Console.ReadLine()!;
-    
-        // Validamos que el ID del paciente exista y que sea un numero
-        if (!int.TryParse(patientIdInput, out int patientId) || !patientDictionary.ContainsKey(patientId))
+        if (!int.TryParse(Console.ReadLine(), out int patientId))
         {
-            Console.WriteLine("Patient not found");
+            Console.WriteLine("Invalid patient ID.");
+            return;
+        }
+
+        if (_patientRepository.GetById(patientId) == null)
+        {
+            Console.WriteLine("Patient not found.");
             return;
         }
 
         Console.Write("Enter pet name: ");
         string name = Console.ReadLine()!;
 
-        // Buscar la mascota
-        var pet = patientDictionary[patientId].Pets.FirstOrDefault(p => p.Name == name);
-
-        if (pet == null)
+        var existingPet = _petRepository.GetByName(patientId, name);
+        if (existingPet == null)
         {
             Console.WriteLine($"Pet {name} not found for patient {patientId}");
             return;
         }
 
-        // Si la mascota existe, pedimos nuevos datos
-        Console.Write("Enter new pet name: ");
+        Console.Write("Enter new pet name (press Enter to keep current): ");
         string newName = Console.ReadLine()!;
         if (!string.IsNullOrEmpty(newName))
-            pet.Name = newName;
+            existingPet.Name = newName;
 
-        Console.Write("Enter new species: ");
+        Console.Write("Enter new species (press Enter to keep current): ");
         string newSpecies = Console.ReadLine()!;
         if (!string.IsNullOrEmpty(newSpecies))
-            pet.Species = newSpecies;
+            existingPet.Species = newSpecies;
 
-        Console.Write("Enter new age: ");
+        Console.Write("Enter new age (press Enter to keep current): ");
         string newAgeInput = Console.ReadLine()!;
-        if (int.TryParse(newAgeInput, out int newAge))
-            pet.Age = newAge;
+        if (!string.IsNullOrEmpty(newAgeInput) && int.TryParse(newAgeInput, out int newAge))
+            existingPet.Age = newAge;
         
-        Console.Write("Enter new symptom: ");
+        Console.Write("Enter new symptom (press Enter to keep current): ");
         string newSymptom = Console.ReadLine()!;
         if (!string.IsNullOrEmpty(newSymptom))
-            pet.Symptom = newSymptom;
+            existingPet.Symptom = newSymptom;
 
-        Console.WriteLine($"Pet updated successfully");
+        _petRepository.Update(patientId, existingPet);
+        Console.WriteLine("Pet updated successfully");
     }
 }
