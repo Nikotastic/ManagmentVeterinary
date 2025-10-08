@@ -4,93 +4,95 @@ using ManagmentVeterinary.Interfaces.Repositories;
 
 
 namespace ManagmentVeterinary.Services;
-public  class ClientService 
+
+public class ClientService
 {
     private static readonly ClientRepository _repo = new ClientRepository();
 
     public static void RegisterClient()
-{
-    Console.WriteLine("\n--- Adding Client ---");
-
-    string name;
-    string phone;
-    string email;
-    string address;
-
-    // --- Nombre ---
-    do
     {
-        Console.Write("Name: ");
-        name = Console.ReadLine()!.Trim();
+        Console.WriteLine("\n--- Adding Client ---");
 
-        if (string.IsNullOrEmpty(name))
-            Console.WriteLine("Name cannot be empty.");
-    } while (string.IsNullOrEmpty(name));
+        string name;
+        string phone;
+        string email;
+        string address;
 
-    // --- Teléfono ---
-    do
-    {
-        Console.Write("Phone: ");
-        phone = Console.ReadLine()!.Trim();
-
-        if (string.IsNullOrEmpty(phone))
+        // --- Nombre ---
+        do
         {
-            Console.WriteLine("Phone cannot be empty.");
-            continue;
-        }
+            Console.Write("Name: ");
+            name = Console.ReadLine()!.Trim();
 
-        if (!phone.All(char.IsDigit) || phone.Length < 7)
+            if (string.IsNullOrEmpty(name))
+                Console.WriteLine("Name cannot be empty.");
+        } while (string.IsNullOrEmpty(name));
+
+        // --- Teléfono ---
+        do
         {
-            Console.WriteLine("Invalid phone number. Must contain only digits and at least 7 numbers.");
-            phone = ""; // forzar a repetir
-        }
+            Console.Write("Phone: ");
+            phone = Console.ReadLine()!.Trim();
 
-    } while (string.IsNullOrEmpty(phone));
+            if (string.IsNullOrEmpty(phone))
+            {
+                Console.WriteLine("Phone cannot be empty.");
+                continue;
+            }
 
-    // --- Email ---
-    do
-    {
-        Console.Write("Email: ");
-        email = Console.ReadLine()!.Trim();
+            if (!phone.All(char.IsDigit) || phone.Length < 7)
+            {
+                Console.WriteLine("Invalid phone number. Must contain only digits and at least 7 numbers.");
+                phone = ""; // forzar a repetir
+            }
 
-        if (string.IsNullOrEmpty(email))
+        } while (string.IsNullOrEmpty(phone));
+
+        // --- Email ---
+        do
         {
-            Console.WriteLine("Email cannot be empty.");
-            continue;
-        }
+            Console.Write("Email: ");
+            email = Console.ReadLine()!.Trim();
 
-        if (!System.Text.RegularExpressions.Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            if (string.IsNullOrEmpty(email))
+            {
+                Console.WriteLine("Email cannot be empty.");
+                continue;
+            }
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                Console.WriteLine(" Invalid email format. Example: example@mail.com");
+                email = ""; // forzar a repetir
+            }
+
+        } while (string.IsNullOrEmpty(email));
+
+        // --- Dirección ---
+        do
         {
-            Console.WriteLine(" Invalid email format. Example: example@mail.com");
-            email = ""; // forzar a repetir
+            Console.Write("Address: ");
+            address = Console.ReadLine()!.Trim();
+
+            if (string.IsNullOrEmpty(address))
+                Console.WriteLine(" Address cannot be empty.");
+        } while (string.IsNullOrEmpty(address));
+
+        // --- Registro final ---
+        try
+        {
+            var id = Data.Database.NextClientId++;
+            var client = new Client(id, name, phone, email, address);
+            _repo.AddClient(client);
+
+            Console.WriteLine($"\n Client added successfully with ID: {client.IdClient}");
         }
-
-    } while (string.IsNullOrEmpty(email));
-
-    // --- Dirección ---
-    do
-    {
-        Console.Write("Address: ");
-        address = Console.ReadLine()!.Trim();
-
-        if (string.IsNullOrEmpty(address))
-            Console.WriteLine(" Address cannot be empty.");
-    } while (string.IsNullOrEmpty(address));
-
-    // --- Registro final ---
-    try
-    {
-        var id = Data.Database.NextClientId++;
-        var client = new Client(id, name, phone, email, address);
-        _repo.AddClient(client);
-
-        Console.WriteLine($"\n Client added successfully with ID: {client.IdClient}");
+        catch (Exception e)
+        {
+            Console.WriteLine($"Error while registering client: {e.Message}");
+        }
     }
-    catch (Exception e)
-    {
-        Console.WriteLine($"Error while registering client: {e.Message}");
-    }
-}
+
     /*public List<Client> GetAllClients()
     {
         return Data.Database.Clients.Values.ToList();
@@ -100,6 +102,7 @@ public  class ClientService
     {
         return Data.Database.Clients.TryGetValue(id, out var client) ? client : null;
     }
+
     public static void UpdateClient()
     {
         Console.Clear();
@@ -120,7 +123,7 @@ public  class ClientService
         }
 
         Console.WriteLine("\n Data client:");
-        Console.WriteLine(client); 
+        Console.WriteLine(client);
 
         Console.WriteLine("\nInser new data (press Enter to keep the current value):");
 
@@ -193,7 +196,7 @@ public  class ClientService
         Console.WriteLine("\nClient deleted successfully.");
     }
 
-    
+
 
     // Metodo para listar clientes
     public static void ListClients()
@@ -266,7 +269,7 @@ public  class ClientService
         Console.WriteLine($"- Address: {client.Address}");
     }
 
-    
+
     public static void AddPetToPatient()
     {
         Console.Write("Enter Client ID: ");
@@ -288,12 +291,13 @@ public  class ClientService
         string raza = Console.ReadLine() ?? "";
         Console.Write("Sympthom (optional): ");
         string? symptom = Console.ReadLine();
+        Console.Write("Sexo: ");
+        string sexo = Console.ReadLine() ?? "";
 
-        var pet = new Pet(Database.NextMascotaId++, name, age, species, raza, symptom, clientId);
+
+        var pet = new Pet(Database.NextMascotaId++, name, age, species, raza, symptom, clientId, sexo);
         Database.Pets.Add(pet);
 
         Console.WriteLine("Pet add succesful");
     }
-
-    }
-    
+}
