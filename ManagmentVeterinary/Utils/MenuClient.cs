@@ -18,9 +18,9 @@ public class MenuClient
             Console.WriteLine("3. Search client by ID");
             Console.WriteLine("4. Update client");
             Console.WriteLine("5. Delete client");
-            Console.WriteLine("6. Agregar mascota a paciente");
+            Console.WriteLine("6. Add pet to patient");
             Console.WriteLine("0. Back to main menu");
-            Console.Write("\nSeleccione una opción: ");
+            Console.Write("\nSelect an option: ");
             
 
             string? option = Console.ReadLine();
