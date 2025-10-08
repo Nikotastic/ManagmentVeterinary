@@ -1,20 +1,36 @@
 ﻿using ManagmentVeterinary.Interfaces;
 namespace ManagmentVeterinary.Models;
-    public class Consultation : VeterinaryService, INotificable
+    public class Consultation : IAttentive
     {
-        public Consultation(DateTime date) : base("General Consultation", date) { }
+        public int Id { get; set; }
+        public int PetId { get; set; }
+        public int VeterinarianId { get; set; }
+        public DateTime Date { get; set; }
+        public string Symptoms { get; set; }
+        public string Diagnosis { get; set; }
+        public string Treatment { get; set; }
+        public double Cost { get; set; }
+        
+        public Consultation(int id, int petId, int veterinarianId, DateTime date, string symptoms, string diagnosis, string treatment, double cost)
+        {
+            Id = id;
+            PetId = petId;
+            VeterinarianId= veterinarianId;
+            Date = date;
+            Symptoms = symptoms;
+            Diagnosis = diagnosis;
+            Treatment = treatment;
+            Cost = cost;
+        }
 
-        public override void Attend(Pet pet)
+        public void Attend()
         {
-            Console.WriteLine($"Consulting pet {pet.Name} on {Date.ToShortDateString()} for {pet.Symptom}");
+            Console.WriteLine($"Consulta {Id} atendida el {Date}"); 
         }
-        public void SendNotification(Pet pet)
+
+        public override string ToString()
         {
-            Console.WriteLine($"Sending notification to {pet.Owner.Name} about {pet.Name} on {Date.ToShortDateString()}");
-        }
-        public void Cancel(Pet pet)
-        {
-            Console.WriteLine($"Canceling consultation for {pet.Name} on {Date.ToShortDateString()}");
+            return $"Id:{Id} PetId:{PetId} VetId:{VeterinarianId} Date:{Date} Symptoms: {Symptoms} Diagnosis: {Diagnosis} Treatment: {Treatment}, Cost: {Cost}";
         }
 
     }

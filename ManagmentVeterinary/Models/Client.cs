@@ -1,25 +1,32 @@
+using ManagmentVeterinary.Interfaces;
 namespace ManagmentVeterinary.Models;
 
-public class Patient
+public class Client: Person, INotificable, IRegistrable
 {
-    // Propiedades
-    private static int id = 1;
-    public int PatientId { get; set; }
-    public string? Name { get; set; }
-    public int Age { get; set; }
-    public string? Phone { get; set; }
-    // Lista de mascotas para conectar con el paciente
-    public List<Pet> Pets { get; set; }
+    public int IdClient { get; set; }
+    public string Address { get; set; }
     
-    // Constructor
-    public Patient( string? name, int age, string? phone)
+    public Client(int idClient, string name, string phone, string? email, string address) : base( name, phone, email)
     {
-        PatientId = id++;
-        Name = name;
-        Age = age;
-        Phone = phone;
-        Pets = new List<Pet>(); // Inicializamos la lista de mascotas
+        IdClient = idClient;
+        Address = address;
     }
+    
+    public void SendNotification(string message)
+    {
+        Console.WriteLine($"[Notificación a dueño {Name}]: {message}");
+    }
+    
+    public void Register()
+    {
+        Console.WriteLine($"Registering client: {Name} with ID: {IdClient} ");
+    }
+    
+    public override string ToString()
+    {
+        return $"Id: {IdClient}, Name: {Name}, Phone: {Phone}, Email: {Email}, Address: {Address}";
+    }
+    
 }
 
 
