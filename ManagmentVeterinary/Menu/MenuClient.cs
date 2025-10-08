@@ -6,17 +6,16 @@ namespace ManagmentVeterinary.Menu;
 public class MenuPatient
 {
     // Servicio que maneja la lógica de negocio de pacientes
-    private readonly IPatientService _patientService;
+    private readonly ClientService _clientService;
 
     // Constructor que inicializa el servicio de pacientes
     public MenuPatient()
     {
-        _patientService = new PatientService();
+        _clientService = new ClientService();
     }
-
-    /// <summary>
-    /// Muestra el menú principal de gestión de pacientes y maneja la interacción del usuario
-    /// </summary>
+    
+    // Muestra el menú principal de gestión de pacientes y maneja la interacción del usuario
+    
     public void ShowMenu()
     {
         bool exit = false;
@@ -39,19 +38,19 @@ public class MenuPatient
             switch (option)
             {
                 case "1":
-                    RegisterPatient();
+                    RegisterClient();
                     break;
                 case "2":
-                    ListPatients();
+                    ListClient();
                     break;
                 case "3":
-                    SearchPatient();
+                    SearchClient();
                     break;
                 case "4":
-                    UpdatePatient();
+                    UpdateClient();
                     break;
                 case "5":
-                    DeletePatient();
+                    DeleteClient();
                     break;
                 case "6":
                     AddPetToPatient();
@@ -67,50 +66,45 @@ public class MenuPatient
         }
     }
 
-    /// <summary>
-    /// Registra un nuevo paciente solicitando los datos necesarios al usuario
-    /// </summary>
-    private void RegisterPatient()
+
+    //Registra un nuevo paciente solicitando los datos necesarios al usuario
+    private void RegisterClient()
     {
-        Console.Clear();
-        Console.WriteLine("\n=== REGISTRO DE NUEVO PACIENTE ===");
+        Console.WriteLine("\n--- Adding Client ---");
+        Console.Write("Name: ");
+        string name = Console.ReadLine()!;
 
-        Console.Write("Nombre: ");
-        string? name = Console.ReadLine();
+        Console.Write("Phone: ");
+        string phone = Console.ReadLine()!;
 
-        int age;
-        do
+        Console.Write("Email: ");
+        string email = Console.ReadLine()!;
+
+        Console.Write("Address: ");
+        string address = Console.ReadLine()!;
+        
+        if(string.IsNullOrEmpty(name) || string.IsNullOrEmpty(phone) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(address))
         {
-            Console.Write("Edad: ");
-        } while (!int.TryParse(Console.ReadLine(), out age) || age < 0);
-
-        Console.Write("Teléfono: ");
-        string? phone = Console.ReadLine();
-
-        try
-        {
-            var patient = new Patient(name, age, phone);
-            _patientService.RegisterPatient(patient);
-            Console.WriteLine("\n¡Paciente registrado exitosamente!");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"\nError al registrar paciente: {ex.Message}");
+            Console.WriteLine("Invalid client data");
+            return;
         }
 
-        Console.WriteLine("\nPresione cualquier tecla para continuar...");
-        Console.ReadKey();
+        int newId = GetAllClients().Any() ? GetAllClients().Max(c => c.IdClient) + 1 : 1;
+
+        var client = new Client(newId, name, phone, email, address);
+        _repo.Add(client);
+
+        Console.WriteLine($"Client added successfully with ID: {client.IdClient}");
     }
 
-    /// <summary>
-    /// Muestra la lista completa de pacientes registrados
-    /// </summary>
-    private void ListPatients()
+   
+    // Muestra la lista completa de pacientes registrados
+    private void ListClient()
     {
         Console.Clear();
         Console.WriteLine("\n=== LISTA DE PACIENTES ===\n");
 
-        var patients = _patientService.GetAllPatients();
+        var patients = _clientService.GetAllClients();
 
         if (!patients.Any())
         {
@@ -128,10 +122,10 @@ public class MenuPatient
         Console.ReadKey();
     }
 
-    /// <summary>
-    /// Busca y muestra la información de un paciente por su ID
-    /// </summary>
-    private void SearchPatient()
+  
+    // Busca y muestra la información de un paciente por su ID
+   
+    private void SearchClient()
     {
         Console.Clear();
         Console.WriteLine("\n=== BUSCAR PACIENTE ===\n");
@@ -139,7 +133,7 @@ public class MenuPatient
         Console.Write("Ingrese el ID del paciente: ");
         if (int.TryParse(Console.ReadLine(), out int id))
         {
-            var patient = _patientService.GetPatientById(id);
+            var patient = _clientService.GetClientById(id);
             if (patient != null)
             {
                 DisplayPatientInfo(patient);
@@ -157,11 +151,9 @@ public class MenuPatient
         Console.WriteLine("\nPresione cualquier tecla para continuar...");
         Console.ReadKey();
     }
-
-    /// <summary>
-    /// Actualiza la información de un paciente existente
-    /// </summary>
-    private void UpdatePatient()
+    
+    // Actualiza la información de un paciente existente
+    private void UpdateClient()
     {
         Console.Clear();
         Console.WriteLine("\n=== ACTUALIZAR PACIENTE ===\n");
@@ -169,7 +161,7 @@ public class MenuPatient
         Console.Write("Ingrese el ID del paciente a actualizar: ");
         if (int.TryParse(Console.ReadLine(), out int id))
         {
-            var patient = _patientService.GetPatientById(id);
+            var patient = _clientService.GetClientById(id);
             if (patient != null)
             {
                 Console.WriteLine("\nDatos actuales del paciente:");
@@ -181,18 +173,18 @@ public class MenuPatient
                 string? newName = Console.ReadLine();
                 patient.Name = string.IsNullOrWhiteSpace(newName) ? patient.Name : newName;
 
-                Console.Write("Edad: ");
+                /*Console.Write("Edad: ");
                 string? newAgeStr = Console.ReadLine();
                 if (!string.IsNullOrWhiteSpace(newAgeStr) && int.TryParse(newAgeStr, out int newAge))
                 {
                     patient.Age = newAge;
-                }
+                }*/
 
                 Console.Write("Teléfono: ");
                 string? newPhone = Console.ReadLine();
                 patient.Phone = string.IsNullOrWhiteSpace(newPhone) ? patient.Phone : newPhone;
 
-                _patientService.UpdatePatient(patient);
+                _clientService.UpdateClient(patient);
                 Console.WriteLine("\n¡Paciente actualizado exitosamente!");
             }
             else
@@ -212,7 +204,7 @@ public class MenuPatient
     /// <summary>
     /// Elimina un paciente del sistema
     /// </summary>
-    private void DeletePatient()
+    private void DeleteClient()
     {
         Console.Clear();
         Console.WriteLine("\n=== ELIMINAR PACIENTE ===\n");
@@ -220,7 +212,7 @@ public class MenuPatient
         Console.Write("Ingrese el ID del paciente a eliminar: ");
         if (int.TryParse(Console.ReadLine(), out int id))
         {
-            var patient = _patientService.GetPatientById(id);
+            var patient = _clientService.GetClientById(id);
             if (patient != null)
             {
                 Console.WriteLine("\nDatos del paciente a eliminar:");
@@ -229,7 +221,7 @@ public class MenuPatient
                 Console.Write("\n¿Está seguro que desea eliminar este paciente? (S/N): ");
                 if (Console.ReadLine()?.Trim().ToUpper() == "S")
                 {
-                    _patientService.DeletePatient(id);
+                    _clientService.DeleteClient(id);
                     Console.WriteLine("\n¡Paciente eliminado exitosamente!");
                 }
                 else
@@ -262,7 +254,7 @@ public class MenuPatient
         Console.Write("Ingrese el ID del paciente: ");
         if (int.TryParse(Console.ReadLine(), out int id))
         {
-            var patient = _patientService.GetPatientById(id);
+            var patient = _clientService.GetClientById(id);
             if (patient != null)
             {
                 // Aquí iría la lógica para crear y agregar una mascota
@@ -285,14 +277,15 @@ public class MenuPatient
     /// <summary>
     /// Muestra la información detallada de un paciente
     /// </summary>
-    /// <param name="patient">Paciente del cual mostrar la información</param>
-    private void DisplayPatientInfo(Patient patient)
+    /// <param name="client">Paciente del cual mostrar la información</param>
+    private void DisplayPatientInfo(Client client)
     {
-        Console.WriteLine($"ID: {patient.PatientId}");
-        Console.WriteLine($"Nombre: {patient.Name}");
-        Console.WriteLine($"Edad: {patient.Age}");
-        Console.WriteLine($"Teléfono: {patient.Phone}");
-        Console.WriteLine($"Cantidad de mascotas: {patient.Pets.Count}");
+        Console.WriteLine($"ID: {client.IdClient}");
+        Console.WriteLine($"Nombre: {client.Name}");
+        //Console.WriteLine($"Edad: {client.Age}");
+        Console.WriteLine($"Teléfono: {client.Phone}");
+        Console.WriteLine($"Email: {client.Email}");
+        Console.WriteLine($"Dirección: {client.Address}");
         Console.WriteLine("----------------------------------------");
     }
 }
