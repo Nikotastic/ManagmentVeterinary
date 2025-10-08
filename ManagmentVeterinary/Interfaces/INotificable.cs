@@ -3,5 +3,5 @@ namespace ManagmentVeterinary.Interfaces;
 
 public interface INotificable
 {
-    void SendNotification(Pet pet);
+    void SendNotification(string message);
 }

@@ -1,6 +1,6 @@
 ﻿namespace ManagmentVeterinary.Interfaces;
 
-public interface IAtendible
+public interface IAttentive
 {
     void Attend();
 }
