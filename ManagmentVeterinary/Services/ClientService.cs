@@ -1,3 +1,4 @@
+using ManagmentVeterinary.Data;
 using ManagmentVeterinary.Models;
 using ManagmentVeterinary.Interfaces.Repositories;
 
@@ -90,10 +91,6 @@ public  class ClientService
         Console.WriteLine($"Error while registering client: {e.Message}");
     }
 }
-
-
-    
-
     /*public List<Client> GetAllClients()
     {
         return Data.Database.Clients.Values.ToList();
@@ -202,6 +199,7 @@ public  class ClientService
     public static void ListClients()
     {
         Console.WriteLine("\n--- Listing Clients ---");
+
         var clients = _repo.GetAll().ToList();
 
         if (clients.Count == 0)
@@ -210,12 +208,34 @@ public  class ClientService
             return;
         }
 
-        // Mostramos los clientes
         foreach (var c in clients)
         {
-            Console.WriteLine($"- ID {c.IdClient}, Name: {c.Name}, Email: {c.Email}, Phone: {c.Phone}, Address: {c.Address}");
+            Console.WriteLine($"\n CLIENT ID: {c.IdClient}");
+            Console.WriteLine($"   Name: {c.Name}");
+            Console.WriteLine($"   Email: {c.Email}");
+            Console.WriteLine($"   Phone: {c.Phone}");
+            Console.WriteLine($"   Address: {c.Address}");
+
+            // Buscar las mascotas asociadas a este cliente
+            var pets = Data.Database.Pets
+                .Where(p => p.ClientId == c.IdClient)
+                .ToList();
+
+            if (pets.Count == 0)
+            {
+                Console.WriteLine("   No pets registered for this client.");
+            }
+            else
+            {
+                Console.WriteLine("Pets:");
+                foreach (var pet in pets)
+                {
+                    Console.WriteLine($"     - ID: {pet.Id}, Name: {pet.Name}, Species: {pet.Species}, Age: {pet.Age}");
+                }
+            }
         }
     }
+
 
     // Metodo para buscar cliente por nombre
     public static void SearchClientById()
@@ -247,30 +267,33 @@ public  class ClientService
     }
 
     
-    /*private static void AddPetToPatient()
+    public static void AddPetToPatient()
     {
-        Console.Clear();
-        Console.WriteLine("\n=== AGREGAR MASCOTA A PACIENTE ===\n");
+        Console.Write("Enter Client ID: ");
+        int clientId = int.Parse(Console.ReadLine() ?? "0");
 
-        Console.Write("Ingrese el ID del paciente: ");
-        if (int.TryParse(Console.ReadLine(), out int id))
+        if (!Database.Clients.ContainsKey(clientId))
         {
-            var patient = _repo.GetById(id);
-            if (patient != null)
-            {
-                Console.WriteLine("\nFuncionalidad en desarrollo...");
-            }
-            else
-            {
-                Console.WriteLine("\nPaciente no encontrado.");
-            }
-        }
-        else
-        {
-            Console.WriteLine("\nID inválido.");
+            Console.WriteLine("Client not found.");
+            return;
         }
 
-        Console.WriteLine("\nPresione cualquier tecla para continuar...");
-        Console.ReadKey();*/
+        Console.Write("Pet name: ");
+        string name = Console.ReadLine() ?? "";
+        Console.Write("Pet age: ");
+        int age = int.Parse(Console.ReadLine() ?? "0");
+        Console.Write("Species: ");
+        string species = Console.ReadLine() ?? "";
+        Console.Write("Breed: ");
+        string raza = Console.ReadLine() ?? "";
+        Console.Write("Sympthom (optional): ");
+        string? symptom = Console.ReadLine();
+
+        var pet = new Pet(Database.NextMascotaId++, name, age, species, raza, symptom, clientId);
+        Database.Pets.Add(pet);
+
+        Console.WriteLine("Pet add succesful");
+    }
+
     }
     
