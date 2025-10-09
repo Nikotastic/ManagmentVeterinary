@@ -13,8 +13,9 @@ public class MenuPet
                 Console.WriteLine("1. Register Pet");
                 Console.WriteLine("2. List Pets");
                 Console.WriteLine("3. Search Pet");
-                Console.WriteLine("4. Delete Pet");
-                Console.WriteLine("5. Exit");
+                Console.WriteLine("4. Update Pet");
+                Console.WriteLine("5. Delete Pet");
+                Console.WriteLine("6. Exit");
                 Console.Write("\nSelect an option: ");
 
                 if (!int.TryParse(Console.ReadLine(), out opcion))
