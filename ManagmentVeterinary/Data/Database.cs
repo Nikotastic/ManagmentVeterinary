@@ -17,4 +17,19 @@ public class Database
    public static int NextVeterinarianId = 1;
    public static int NextConsultaId = 1;
    
+   
+   // creacion de una lista con horarios
+   public static List<TimeSpan> AvailableHours{get; } = new()
+   {
+      new TimeSpan(8, 0, 0),
+      new TimeSpan(9, 0, 0),
+      new TimeSpan(10, 0, 0),
+      new TimeSpan(11, 0, 0),
+      new TimeSpan(14, 0, 0),
+      new TimeSpan(15, 0, 0),
+      new TimeSpan(16, 0, 0)
+   };
+
+   
 }
+
