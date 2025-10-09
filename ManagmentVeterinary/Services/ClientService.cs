@@ -11,6 +11,7 @@ public class ClientService
 
     public static void RegisterClient()
     {
+        Console.Clear();
         Console.WriteLine("\n--- Adding Client ---");
 
         string name;
