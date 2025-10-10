@@ -2,7 +2,7 @@
 
 namespace ManagmentVeterinary.Models;
 
-public class Pet: Animal, INotificable, IRegistrable
+public class Pet: Animal, INotification, IRegistrable
 {
     public int Id { get; set; }
     public string Breed { get; set; }
@@ -27,9 +27,9 @@ public class Pet: Animal, INotificable, IRegistrable
 
     public override string IssueSound()
     {
-        if (Species.ToLower().Contains("perro")) return "Guau";
-        if (Species.ToLower().Contains("gato")) return "Miau";
-        return "Sonido";
+        if (Species.ToLower().Contains("Dog")) return "Guau";
+        if (Species.ToLower().Contains("Cat")) return "Miau";
+        return "Sound";
     }
     public void Register()
     {

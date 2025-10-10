@@ -35,11 +35,7 @@ public class PetRepository : IPetRepository
     
     public void Delete(int id)
     {
-        var exist = Database.Pets.FirstOrDefault(p => p.Id == id);
-        if (exist != null)
-        {
-            Database.Pets.Remove(exist);
-        }
+        Database.Pets.RemoveAll(p => p.Id == id); 
     }
     
     public Pet GetById(int id)
@@ -51,5 +47,12 @@ public class PetRepository : IPetRepository
     {
         return Database.Pets.Where(p => p.ClientId == clientId);
     }
+    
+    // eliminar múltiples mascotas por ClientId
+    public void DeleteAllByClientId(int clientId)
+    {
+        Database.Pets.RemoveAll(pet => pet.ClientId == clientId);
+    }
+    
     
 }
