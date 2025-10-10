@@ -7,11 +7,14 @@ public class MenuMain
         int opcion;
         do
         {
-            Console.WriteLine("\n--- MENU PRINCIPAL ---");
-            Console.WriteLine("1. Clientes");
-            Console.WriteLine("2. Mascotas");
-            Console.WriteLine("3. Salir");
-            Console.Write("\nSeleccione una opción: ");
+            Console.WriteLine("\n--- MAIN MENU ---");
+            Console.WriteLine("1. Clients");
+            Console.WriteLine("2. Pets");
+            Console.WriteLine("3. Veterinaries");
+            Console.WriteLine("4. Consultation");
+            Console.WriteLine("5. LINQ");
+            Console.WriteLine("6. Salir");
+            Console.Write("\nSelect a option: ");
 
             if (!int.TryParse(Console.ReadLine(), out opcion))
             {
@@ -30,12 +33,23 @@ public class MenuMain
                     menuPet.MostrarMenu();
                     break;
                 case 3:
-                    Console.WriteLine("Saliendo del menú principal...");
+                    MenuVeterinarian menuVeterinarian = new MenuVeterinarian();
+                    menuVeterinarian.MostrarMenu();
+                    break;
+                case 4:
+                    MenuConsultation menuConsultation = new MenuConsultation();
+                    menuConsultation.ShowMenu();
+                    break;
+                case 5:
+                    new MenuLinq().ShowMenu();
+                    break;
+                case 6:
+                    Console.WriteLine("Exiting the main menu...");
                     break;
                 default:
-                    Console.WriteLine("Opción inválida.");
+                    Console.WriteLine("Invalid option."); 
                     break;
             }
-        } while (opcion != 3);
+        } while (opcion != 6);
     }
 }
