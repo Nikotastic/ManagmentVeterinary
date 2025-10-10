@@ -1,7 +1,7 @@
 ﻿using ManagmentVeterinary.Models;
 namespace ManagmentVeterinary.Interfaces;
 
-public interface INotificable
+public interface INotification
 {
     void SendNotification(string message);
 }

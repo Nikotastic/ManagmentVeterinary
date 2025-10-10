@@ -2,5 +2,5 @@
 
 public interface IAttentive
 {
-    void Attend();
+    void Attend(); 
 }
