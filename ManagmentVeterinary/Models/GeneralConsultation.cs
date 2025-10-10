@@ -1,5 +1,6 @@
 ﻿namespace ManagmentVeterinary.Models;
 
+// class for the general consultation and implements the interface IAttentive
 public class GeneralConsultation : VeterinaryService
 {
     public string Diagnosis { get; set; }

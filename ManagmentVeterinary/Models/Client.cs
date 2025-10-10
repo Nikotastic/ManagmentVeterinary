@@ -1,6 +1,7 @@
 using ManagmentVeterinary.Interfaces;
 namespace ManagmentVeterinary.Models;
 
+// class for the client and implements the interfaces INotification and IRegistrable
 public class Client: Person, INotification, IRegistrable
 {
     public int IdClient { get; set; }
@@ -12,6 +13,7 @@ public class Client: Person, INotification, IRegistrable
         Address = address;
     }
     
+    // Implementing the interface methods
     public void SendNotification(string message)
     {
         Console.WriteLine($"[Notificación a dueño {Name}]: {message}");

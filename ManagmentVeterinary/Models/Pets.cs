@@ -2,6 +2,7 @@
 
 namespace ManagmentVeterinary.Models;
 
+// class for the pet and implements the interfaces IssueSound, INotification and IRegistrable
 public class Pet: Animal, INotification, IRegistrable
 {
     public int Id { get; set; }

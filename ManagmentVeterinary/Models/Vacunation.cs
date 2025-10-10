@@ -1,5 +1,6 @@
 ﻿namespace ManagmentVeterinary.Models;
 
+// class for the vaccination and implements the interface IAttentive
 public class Vacunation : VeterinaryService
 {
     public string TypeOfVaccine{ get; set; }

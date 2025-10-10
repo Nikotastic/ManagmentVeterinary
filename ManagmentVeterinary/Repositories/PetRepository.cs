@@ -6,6 +6,7 @@ namespace ManagmentVeterinary.Repositories;
 
 public class PetRepository : IPetRepository
 {
+    // Methods of crud with conect the database
     public void AddPet(Pet pet)
     {
         pet.Id = Database.NextMascotaId++;
@@ -48,7 +49,7 @@ public class PetRepository : IPetRepository
         return Database.Pets.Where(p => p.ClientId == clientId);
     }
     
-    // eliminar múltiples mascotas por ClientId
+    // remove multiple pets by ClientId
     public void DeleteAllByClientId(int clientId)
     {
         Database.Pets.RemoveAll(pet => pet.ClientId == clientId);

@@ -6,8 +6,10 @@ namespace ManagmentVeterinary.Models;
 
 public class VeterinarianService
 {
+    // Methods of crud with conect the database
     private static readonly VeterinarianRepository _veterinarianRepository = new VeterinarianRepository();
 
+    // Method to add a veterinarian
     public static void RegisterVeterinarian()
     {
         Console.Clear();
@@ -58,6 +60,7 @@ public class VeterinarianService
         }
     }
 
+    // Method to list a veterinarian
     public static void ListVeterinarians()
     {
         Console.Clear();
@@ -77,6 +80,7 @@ public class VeterinarianService
         }
     }
 
+    // Method to search a veterinarian by id
     public static void SearchVeterinarianById()
     {
         Console.Clear();
@@ -106,6 +110,7 @@ public class VeterinarianService
         Console.WriteLine("---------------------------------------------\n");
     }
 
+    // Method to update a veterinarian
     public static void UpdateVeterinarian()
     {
         Console.Clear();
@@ -118,7 +123,7 @@ public class VeterinarianService
             return;
         }
 
-        // Usar el repositorio de Veterinario para obtener el objeto
+        // Use the Vet repository to obtain the object
         var veterinarian = _veterinarianRepository.GetById(id);
         if (veterinarian == null)
         {
@@ -126,21 +131,21 @@ public class VeterinarianService
             return;
         }
 
-        // Mostramos los datos actuales
+        // We show the current data
         Console.WriteLine("\n Current Veterinarian Data:");
         Console.WriteLine(
             $"ID: {veterinarian.VeterinarianId} | Name: {veterinarian.Name} | Speciality: {veterinarian.Specialization}");
 
         Console.WriteLine("\nInsert new data (press Enter to keep the current value):");
 
-        // Actualizamos
+        // Update
         var name = BreakBucle.GetStringOrCancel("New name", true);
         if (!string.IsNullOrWhiteSpace(name))
-            veterinarian.Name = name; // Actualiza el objeto
+            veterinarian.Name = name; 
 
         var phone = BreakBucle.GetStringOrCancel("New phone", true);
         if (!string.IsNullOrWhiteSpace(phone))
-            veterinarian.Phone = phone; // Actualiza el objeto
+            veterinarian.Phone = phone; 
 
         var email = BreakBucle.GetStringOrCancel("New email", true);
         if (!string.IsNullOrWhiteSpace(email) && email.Contains("@"))
@@ -150,11 +155,11 @@ public class VeterinarianService
 
         var speciality = BreakBucle.GetStringOrCancel("New speciality", true);
         if (!string.IsNullOrWhiteSpace(speciality))
-            veterinarian.Specialization = speciality; // Actualiza el objeto
+            veterinarian.Specialization = speciality; 
 
         try
         {
-            // Llamamos al método Update del repositorio
+            // We call the Update method of the repository
             _veterinarianRepository.Update(veterinarian);
             Console.WriteLine($"\n Veterinarian updated successfully with ID: {veterinarian.VeterinarianId}");
         }
@@ -164,6 +169,7 @@ public class VeterinarianService
         }
     }
 
+    // Method to delete a veterinarian
     public static void DeleteVeterinarian()
     {
         Console.Clear();
@@ -185,7 +191,7 @@ public class VeterinarianService
             return;
         }
         
-        // Preguntamos al usuario confirmacion
+        // We ask the user for confirmation
         var confirm = BreakBucle.GetStringOrCancel("\nAre you sure you want to delete the following veterinarian?");
         Console.WriteLine($"ID: {veterinarian.VeterinarianId} | Name: {veterinarian.Name} | Speciality: {veterinarian.Specialization}");
 
@@ -193,7 +199,7 @@ public class VeterinarianService
         {
             try
             {
-                // logica de eliminacion 
+                // elimination logic
                 _veterinarianRepository.Delete(id); 
                 Console.WriteLine($"\n Veterinarian with ID {id} deleted successfully.");
             }

@@ -8,9 +8,11 @@ namespace ManagmentVeterinary.Services;
 
 public class PetService
 {
+    // Methods of crud with conect the database
     private static readonly PetRepository _petRepository = new PetRepository();
     private static readonly ClientRepository _clientRepository = new ClientRepository();
     
+    // Method to add a pet
     public static void AddPet()
     {
         Console.Clear();
@@ -79,6 +81,7 @@ public class PetService
         }
     }
     
+    // Method to List a pet
     public static void ListPets()
     {
         var pets = _petRepository.ListPets();
@@ -97,6 +100,7 @@ public class PetService
         }
     }
     
+    // Method to Search a pet
     public static void SearchPet()
     {
         Console.WriteLine("\n--- Search Pet by ID ---");
@@ -126,7 +130,7 @@ public class PetService
         Console.WriteLine($"- Symptom: {pet.Symptom}");
         Console.WriteLine($"- Sex: {pet.Sexo}");
 
-        // Mostrar información del dueño si existe
+        // Show owner information if it exists
         if (pet.ClientId != null)
         {
             var client = _clientRepository.GetById(pet.ClientId);
@@ -140,7 +144,7 @@ public class PetService
             Console.WriteLine("- Owner: Sin dueño");
         }
     }
-    
+    // Method to Update a pet
     public static void UpdatePet()
     {
         Console.WriteLine("\n--- Update Pet by ID ---");
@@ -219,6 +223,7 @@ public class PetService
         Console.WriteLine($"\nPet '{pet.Name}' updated successfully.");
     }
     
+    // Method to Delete a pet
     public static void DeletePet()
     {
         Console.WriteLine("\n--- Delete Pet by ID ---");
@@ -256,6 +261,7 @@ public class PetService
         Console.WriteLine($"\nPet '{pet.Name}' deleted successfully.");
     }
     
+    // Method to Test a pet
     public static void TestVeterinaryService(int petId)
     {
         var pet = _petRepository.GetById(petId);
@@ -265,22 +271,22 @@ public class PetService
             return;
         }
 
-        // Probando polimorfismo con el sonido del animal
+        // Testing polymorphism with animal sound
         Console.WriteLine($"\nTesting sounds of {pet.Name}:");
         Console.WriteLine($"The pet does: {pet.IssueSound()}");
 
-        // Probando diferentes servicios veterinarios
+        // Trying different veterinary services
         Console.WriteLine("\nTrying different veterinary services:");
         
-        // Consulta General
+        // General Consultation
         var consultation = new GeneralConsultation(1, "Routine consultation", 50.0m, "General healthy condition");
         consultation.Attend(pet);
 
-        // Vacunación
+        // Vaccination
         var vacunation = new Vacunation(2, "Annual vaccination", 75.0m, "Rabies vaccine", DateTime.Now.AddYears(1));
         vacunation.Attend(pet);
 
-        // Probando el registro
+        // Testing the registry
         Console.WriteLine("\nTesting registration:");
         pet.Register();
     }

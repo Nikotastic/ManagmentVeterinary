@@ -2,6 +2,7 @@
 
 namespace ManagmentVeterinary.Interfaces;
 
+// Interface for veterinarian repository
 public interface IVeterinarianRepository
 {
     void AddVeterinarian(Veterinarian veterinarian);

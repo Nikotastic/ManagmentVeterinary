@@ -3,8 +3,10 @@ using ManagmentVeterinary.Models;
 
 namespace ManagmentVeterinary.Repositories;
 
+// Class for the consultation repository, implements the interface IConsultationRepository 
 public class ConsultationRepository : IConsultationRepository
 {
+    // Methods of crud with conect the database
     public void AddConsultation(Consultation consultation)
     {
         Data.Database.Consultations.Add(consultation);

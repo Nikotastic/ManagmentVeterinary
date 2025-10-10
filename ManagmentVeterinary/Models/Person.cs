@@ -1,5 +1,6 @@
 ﻿namespace ManagmentVeterinary.Models;
 
+// Abstract class for person
 public abstract class Person
 {
     public string Name { get; set; }

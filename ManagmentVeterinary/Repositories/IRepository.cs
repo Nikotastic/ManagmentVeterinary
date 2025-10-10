@@ -2,6 +2,7 @@ using System.Collections.Generic;
 
 namespace Interfaces
 {
+    
     public interface IRepository<T>
     {
         IEnumerable<T> GetAll();

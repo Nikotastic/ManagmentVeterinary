@@ -1,5 +1,7 @@
 ﻿using ManagmentVeterinary.Interfaces;
 namespace ManagmentVeterinary.Models;
+
+// class for the consultation and implements the interface IAttentive
     public class Consultation : IAttentive
     {
         public int Id { get; set; }
@@ -26,7 +28,7 @@ namespace ManagmentVeterinary.Models;
 
         public void Attend()
         {
-            Console.WriteLine($"Consulta {Id} atendida el {Date:yyyy-MM-dd HH:mm}"); 
+            Console.WriteLine($"Query {Id} attended on {Date:yyyy-MM-dd HH:mm}"); 
         }
 
         public override string ToString()

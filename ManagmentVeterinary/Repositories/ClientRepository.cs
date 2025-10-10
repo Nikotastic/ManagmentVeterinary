@@ -3,8 +3,10 @@ using ManagmentVeterinary.Models;
 
 namespace ManagmentVeterinary.Interfaces.Repositories;
 
+// Class for the client reposity, implements the interface IClientRepository 
 public class ClientRepository : IClientRepository
 {
+    // Methos to CRUD clients to the database
     public void AddClient(Client client)
     {
         Data.Database.Clients.Add(client.IdClient, client);
@@ -34,6 +36,7 @@ public class ClientRepository : IClientRepository
         Data.Database.Clients.Remove(id);
     }
 
+    // Method to find clients by name 
     public IEnumerable<Client> FindByName(string name)
     {
         return Data.Database.Clients.Values

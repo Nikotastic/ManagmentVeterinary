@@ -2,6 +2,7 @@
 
 namespace ManagmentVeterinary.Menu;
 
+// Displays the main veterinarian management menu and handles user interaction
 public class MenuVeterinarian
 {
     public void MostrarMenu()

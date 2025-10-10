@@ -4,6 +4,7 @@ namespace ManagmentVeterinary.Data;
 
 public class Database
 {
+   // Database creation
    public static Dictionary<int, Client> Clients { get; } = new Dictionary<int, Client>();
    public static List<Pet> Pets { get; } = new List<Pet>();
    public static List<Consultation> Consultations { get; } = new List<Consultation>();
@@ -18,7 +19,7 @@ public class Database
    public static int NextConsultaId = 1;
    
    
-   // creacion de una lista con horarios
+   // creating a list with schedules
    public static List<TimeSpan> AvailableHours{get; } = new()
    {
       new TimeSpan(8, 0, 0),

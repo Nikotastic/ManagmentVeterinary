@@ -2,6 +2,7 @@
 
 public static class BreakBucle
 {
+    // Method to get a string or cancel
     public static string? GetStringOrCancel(string message, bool allowEmpty = false)
     {
         while (true)
@@ -21,7 +22,7 @@ public static class BreakBucle
             return input; 
         }
     }
-    // Utiliza un delegado genérico (Func<int, T?>) que permite pasarle al método la función de búsqueda del repositorio (_petRepository.GetById o _veterinarianRepository.GetById) como argumento
+    // It uses a generic delegate (Func<int, T?>) that allows you to pass the repository search function (_petRepository.GetById or _veterinarianRepository.GetById) to the method as an argument.
     public static int? GetValidId<T>(string entityName, Func<int, T?> repositoryLookup) where T : class
     {
         int id;
@@ -33,7 +34,7 @@ public static class BreakBucle
             input = Console.ReadLine()!.Trim();
 
             if (input.ToLower() == "cancel")
-                return null; // Devuelve null si el usuario cancela
+                return null; // Returns null if the user cancels
 
             if (!int.TryParse(input, out id))
             {
@@ -41,11 +42,11 @@ public static class BreakBucle
                 continue;
             }
 
-            // Usa la función de búsqueda proporcionada (el delegado Func<int, T?>)
+            // Use the provided search function (the Func<int, T?> delegate)
             var entity = repositoryLookup(id); 
             
             if (entity != null)
-                return id; // Devuelve el ID si la entidad existe
+                return id; // Returns the ID if the entity exists
             
             Console.WriteLine($"No {entityName.ToLower()} found with ID {id}. Try again.");
         }

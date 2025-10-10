@@ -2,6 +2,7 @@
 
 namespace ManagmentVeterinary.Menu;
 
+// Displays the main consultation management menu and handles user interaction
 public class MenuConsultation
 {
     public void ShowMenu()

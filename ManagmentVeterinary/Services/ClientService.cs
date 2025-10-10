@@ -9,19 +9,19 @@ namespace ManagmentVeterinary.Services;
 
 public class ClientService
 {
+    // Methods of crud with conect the database
     private static readonly ClientRepository _repo = new ClientRepository();
     private static readonly PetRepository _petRepository = new PetRepository();
 
+    // Method to register a client
     public static void RegisterClient()
     {
         Console.Clear();
         Console.WriteLine("\n--- Adding Client ---");
-
-        // Nombre
+        
         var name = BreakBucle.GetStringOrCancel("Name");
         if (name == null) return;
-
-        // Teléfono
+        
         string? phone;
         do
         {
@@ -34,8 +34,7 @@ public class ClientService
                 phone = null;
             }
         } while (phone == null);
-
-        // Email
+        
         string? email;
         do
         {
@@ -48,12 +47,11 @@ public class ClientService
                 email = null;
             }
         } while (email == null);
-
-        // Dirección
+        
         var address = BreakBucle.GetStringOrCancel("Address");
         if (address == null) return;
 
-        // Registro final
+        // Final record
         try
         {
             var id = Database.NextClientId++;
@@ -67,17 +65,13 @@ public class ClientService
             Console.WriteLine($"Error while registering client: {e.Message}");
         }
     }
-
-    /*public List<Client> GetAllClients()
-    {
-        return Data.Database.Clients.Values.ToList();
-    }
-*/
+    
     public static Client? GetClientById(int id)
     {
         return Data.Database.Clients.TryGetValue(id, out var client) ? client : null;
     }
 
+    // Method to update a client
     public static void UpdateClient()
     {
         Console.Clear();
@@ -86,6 +80,7 @@ public class ClientService
         var idInput = BreakBucle.GetStringOrCancel("Enter client ID");
         if (idInput == null) return;
 
+        // validations
         if (!int.TryParse(idInput, out int id))
         {
             Console.WriteLine("\nID invalid. It must be a number");
@@ -99,6 +94,7 @@ public class ClientService
             return;
         }
 
+        // Data client
         Console.WriteLine("\nData client:");
         Console.WriteLine(client);
 
@@ -135,6 +131,7 @@ public class ClientService
         }
     }
 
+    // Methods to delete a client
     public static void DeleteClient()
     {
         Console.WriteLine("\n--- Deleting Client ---");
@@ -172,7 +169,7 @@ public class ClientService
 
 
 
-    // Metodo para listar clientes
+    // Method to list clients
     public static void ListClients()
     {
         Console.WriteLine("\n--- Listing Clients ---");
@@ -193,7 +190,7 @@ public class ClientService
             Console.WriteLine($"   Phone: {c.Phone}");
             Console.WriteLine($"   Address: {c.Address}");
 
-            // Buscar las mascotas asociadas a este cliente
+            // Find the pets associated with this client
             var pets = Data.Database.Pets
                 .Where(p => p.ClientId == c.IdClient)
                 .ToList();
@@ -214,7 +211,7 @@ public class ClientService
     }
 
 
-    // Metodo para buscar cliente por nombre
+    // Method to search for client by name
     public static void SearchClientById()
     {
         Console.WriteLine("\n--- Search Client by ID ---");
@@ -245,6 +242,7 @@ public class ClientService
     }
 
 
+    // Method to add a pet to a client
     public static void AddPetToPatient()
     {
         Console.WriteLine("\n--- Adding Pet to Patient ---");
@@ -299,6 +297,7 @@ public class ClientService
             }
         } while (sex == null);
 
+        // Final record 
         var pet = new Pet(Database.NextMascotaId++, name, age, species, breed, symptom, clientId, sex);
         _petRepository.AddPet(pet);     
 

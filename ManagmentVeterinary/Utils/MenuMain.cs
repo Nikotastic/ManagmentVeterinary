@@ -1,5 +1,6 @@
 ﻿namespace ManagmentVeterinary.Menu;
 
+// Displays the main consultation management menu and handles user interaction
 public class MenuMain
 {
     public void ShowMenu()
@@ -13,7 +14,7 @@ public class MenuMain
             Console.WriteLine("3. Veterinaries");
             Console.WriteLine("4. Consultation");
             Console.WriteLine("5. LINQ");
-            Console.WriteLine("6. Salir");
+            Console.WriteLine("6. Exit");
             Console.Write("\nSelect a option: ");
 
             if (!int.TryParse(Console.ReadLine(), out opcion))

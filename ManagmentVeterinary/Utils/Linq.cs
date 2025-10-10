@@ -5,6 +5,7 @@ namespace ManagmentVeterinary.Menu;
 
 public class MenuLinq
 {
+    // Attributes
     private static List<Pet> pets = Database.Pets;
 
     public void ShowMenu()
@@ -71,6 +72,7 @@ public class MenuLinq
         } while (opcion != 8);
     }
 
+    // Methods
     private static void FilterBySpecies()
     {
         Console.Write("Enter species to filter: ");

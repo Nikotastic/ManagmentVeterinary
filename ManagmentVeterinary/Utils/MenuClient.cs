@@ -4,7 +4,7 @@ namespace ManagmentVeterinary.Menu;
 public class MenuClient
 {
 
-    // Muestra el menú principal de gestión de pacientes y maneja la interacción del usuario
+    // Displays the main patient management menu and handles user interaction
     public void ShowMenu()
     {
         bool exit = false;

@@ -2,6 +2,7 @@
 
 namespace ManagmentVeterinary.Menu;
 
+// Displays the main pet management menu and handles user interaction
 public class MenuPet
 {
         public void MostrarMenu()
@@ -15,7 +16,7 @@ public class MenuPet
                 Console.WriteLine("3. Search Pet");
                 Console.WriteLine("4. Update Pet");
                 Console.WriteLine("5. Delete Pet");
-                Console.WriteLine("6. Probar Servicios Veterinarios");
+                Console.WriteLine("6. Try Veterinary Services");
                 Console.WriteLine("7. Exit");
                 Console.Write("\nSelect an option: ");
 

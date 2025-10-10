@@ -2,6 +2,7 @@
 
 namespace ManagmentVeterinary.Interfaces;
 
+// Interface for consultation repository
 public interface IConsultationRepository
 {
     void AddConsultation (Consultation consultation);

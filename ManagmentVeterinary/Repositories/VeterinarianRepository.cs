@@ -5,6 +5,7 @@ namespace ManagmentVeterinary.Repositories;
 
 public class VeterinarianRepository : IVeterinarianRepository
 {
+    // Methods of crud with conect the database
     public void AddVeterinarian(Veterinarian veterinarian)
     {
         Data.Database.Veterinaries.Add(veterinarian);
@@ -17,7 +18,7 @@ public class VeterinarianRepository : IVeterinarianRepository
 
     public void Update(Veterinarian veterinarian)
     {
-        // 1. Encontrar el índice del veterinario a actualizar
+        // Find the index of the veterinarian to update
         Data.Database.Veterinaries
             .FindIndex(v => v.VeterinarianId == veterinarian.VeterinarianId);
     }

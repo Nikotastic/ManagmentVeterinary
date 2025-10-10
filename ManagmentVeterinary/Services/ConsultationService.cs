@@ -7,10 +7,12 @@ namespace ManagmentVeterinary.Services;
 
 public class ConsultationService
 {
+    // Methods of crud with conect the database
     private static readonly ConsultationRepository _consultationRepository = new ConsultationRepository();
     private static readonly PetRepository _petRepository = new PetRepository();
     private static readonly VeterinarianRepository _veterinarianRepository = new VeterinarianRepository();
     
+    // Method to add a consultation
     public static void AddConsultation()
     {
         Console.Clear();
@@ -32,21 +34,21 @@ public class ConsultationService
         }
         int idVeterinarian = idVeterinarianNullable.Value;
 
-        // Mostrar fechas disponibles
+        // Show available dates
         DateTime dateOnly;
         while (true)
         {
             Console.Write("Enter date (yyyy-MM-dd): ");
             if (DateTime.TryParse(Console.ReadLine(), out dateOnly))
             {
-                // validamos que la fecha no se antigua
+                // we validate that the date is not old
                 if (dateOnly.Date >= DateTime.Now.Date) break;
                 Console.WriteLine("You cannot schedule in the past.");
             }
             else Console.WriteLine("Invalid date format.");
         }
 
-        // Mostramos las horas disponibles
+        // We show available hours
         var existingConsults = Database.Consultations
             .Where(c => c.VeterinarianId == idVeterinarian && c.Date.Date == dateOnly.Date)
             .Select(c => c.Date.TimeOfDay)
@@ -54,20 +56,20 @@ public class ConsultationService
 
         var freeHours = Database.AvailableHours.Except(existingConsults).ToList(); 
 
-        // Validamos que existan horas disponibles
+        // We validate that there are hours available
         if (!freeHours.Any())
         {
             Console.WriteLine("No available hours for that date.");
             return;
         }
 
-        // Mostramos las horas disponibles
+        // We show available hours
         Console.WriteLine("\nAvailable Hours:");
         for (int i = 0; i < freeHours.Count; i++)
             Console.WriteLine($"{i + 1}. {freeHours[i]:hh\\:mm}");
 
         int choice;
-        // Validamos que la hora seleccionada sea valida
+        // We validate that the selected time is valid
         while (true)
         {
             Console.Write("Select hour: ");
@@ -76,7 +78,7 @@ public class ConsultationService
             Console.WriteLine("Invalid option.");
         }
         
-        // Sumamos la fecha y la hora seleccionada, para obtener la fecha completa y si la seleccione que no se repita
+        // We add the selected date and time, to obtain the complete date and if you select it, it will not be repeated
         DateTime fullDate = dateOnly.Date + freeHours[choice - 1];
         
         Console.WriteLine("Symptoms: ");
@@ -110,6 +112,7 @@ public class ConsultationService
                 cost
             );
 
+            // We add the consultation to the database
             _consultationRepository.AddConsultation(consultation);
             Console.WriteLine($"\n Consultation scheduled successfully for {fullDate.ToString("dddd, dd/MM/yyyy")}");
         }
@@ -118,7 +121,7 @@ public class ConsultationService
             Console.WriteLine($"\n Error adding consultation: {ex.Message}");
         }
     }
-    
+    // Method to delete a consultation
     public static void DeleteConsultation()
     {
         Console.Clear();
@@ -130,11 +133,11 @@ public class ConsultationService
             Console.WriteLine("\nID invalid.");
             return;
         }
-
+        // We delete the consultation from the database
         _consultationRepository.Delete(id);
         Console.WriteLine($"\n Consultation deleted successfully with ID: {id}");
     }
-    
+    // Method to update a consultation
     public static void UpdateConsultation()
     {
         Console.Clear();
@@ -146,7 +149,7 @@ public class ConsultationService
             Console.WriteLine("\nID invalid.");
             return;
         }
-
+        // We get the consultation from the database
         var consultation = _consultationRepository.GetById(id);
         if (consultation == null)
         {
@@ -186,6 +189,7 @@ public class ConsultationService
 
         try
         {
+            // We update the consultation in the database
             _consultationRepository.Update(consultation);
             Console.WriteLine($"\nConsultation updated successfully with ID: {id}");
         }
@@ -195,6 +199,7 @@ public class ConsultationService
         }
     }
     
+    // Method to list all consultations
     public static void ListConsultations()
     {
         Console.Clear();
@@ -209,6 +214,7 @@ public class ConsultationService
 
         foreach (var consultation in consultations)
         {
+            // We get the pet and veterinarian from the database
             var pet = _petRepository.GetById(consultation.PetId);
             var vet = _veterinarianRepository.GetById(consultation.VeterinarianId);
             
@@ -221,7 +227,7 @@ public class ConsultationService
             Console.WriteLine($"{consultation.Id} | {petName} | {vetName} | {data} | {cost}");
         }
     }
-    
+    // Method to search a consultation
     public static void SearchConsultation()
     {
         Console.Clear();
@@ -233,7 +239,7 @@ public class ConsultationService
             Console.WriteLine("\nID invalid.");
             return;
         }
-
+        // We get the consultation from the database
         var consultation = _consultationRepository.GetById(id);
         if (consultation == null)
         {

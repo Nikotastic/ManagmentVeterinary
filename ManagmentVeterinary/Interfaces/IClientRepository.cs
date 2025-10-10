@@ -2,6 +2,7 @@
 using ManagmentVeterinary.Services;
 namespace ManagmentVeterinary.Interfaces;
 
+// Interface for client repository
 public interface IClientRepository
 {
     void AddClient(Client client);

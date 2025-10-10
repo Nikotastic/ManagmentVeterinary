@@ -2,6 +2,7 @@
 using ManagmentVeterinary.Models;
 namespace ManagmentVeterinary.Models;
 
+// class for the veterinarian and implements the interface Person, INotification and IRegistrable
 public class Veterinarian : Person, INotification, IRegistrable
 {
     public int VeterinarianId { get; set; }

@@ -2,6 +2,7 @@ using ManagmentVeterinary.Models;
 
 namespace ManagmentVeterinary.Interfaces.Repositories;
 
+// Interface for pet repository
 public interface IPetRepository
 {
     void AddPet(Pet pet);

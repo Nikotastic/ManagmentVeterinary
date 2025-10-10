@@ -1,5 +1,6 @@
 ﻿namespace ManagmentVeterinary.Models;
 
+// Abstract class for animals
 public abstract class Animal
 {
     public string Name { get; set; }
@@ -7,6 +8,7 @@ public abstract class Animal
     public string Species { get; set; }
     public string Sexo { get; set; }
 
+    // Constructor
     protected Animal(string name, int age, string species, string sexo)
     {
         Name = name;
@@ -15,6 +17,6 @@ public abstract class Animal
         Sexo = sexo;
     }
 
-    // Método abstracto que debe ser implementado por las subclases
+    // Abstract method that must be implemented by subclasses
     public abstract string IssueSound();
 }
