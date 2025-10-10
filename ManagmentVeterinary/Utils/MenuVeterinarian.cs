@@ -42,7 +42,7 @@ public class MenuVeterinarian
                     VeterinarianService. DeleteVeterinarian();
                     break;
                 case 6:
-                    Console.WriteLine("Exiting the Pet Menu...");
+                    Console.WriteLine("Exiting the Vet Menu...");
                     break;
                 default:
                     Console.WriteLine("Invalid option.");
