@@ -2,7 +2,7 @@
 using ManagmentVeterinary.Models;
 namespace ManagmentVeterinary.Models;
 
-public class Veterinarian : Person, INotificable, IRegistrable
+public class Veterinarian : Person, INotification, IRegistrable
 {
     public int VeterinarianId { get; set; }
     public string Specialization { get; set; }

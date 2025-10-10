@@ -1,7 +1,7 @@
 using ManagmentVeterinary.Interfaces;
 namespace ManagmentVeterinary.Models;
 
-public class Client: Person, INotificable, IRegistrable
+public class Client: Person, INotification, IRegistrable
 {
     public int IdClient { get; set; }
     public string Address { get; set; }
