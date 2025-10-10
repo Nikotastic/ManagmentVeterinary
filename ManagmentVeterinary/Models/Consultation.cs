@@ -17,15 +17,16 @@ namespace ManagmentVeterinary.Models;
             PetId = petId;
             VeterinarianId= veterinarianId;
             Date = date;
-            Symptoms = symptoms;
-            Diagnosis = diagnosis;
-            Treatment = treatment;
+            Symptoms = symptoms ?? "N/A";
+            Diagnosis = diagnosis ?? "N/A";
+            Treatment = treatment ?? "N/A";
             Cost = cost;
         }
+        
 
         public void Attend()
         {
-            Console.WriteLine($"Consulta {Id} atendida el {Date}"); 
+            Console.WriteLine($"Consulta {Id} atendida el {Date:yyyy-MM-dd HH:mm}"); 
         }
 
         public override string ToString()
