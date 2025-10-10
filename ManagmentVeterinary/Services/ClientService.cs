@@ -1,6 +1,8 @@
 using ManagmentVeterinary.Data;
 using ManagmentVeterinary.Models;
 using ManagmentVeterinary.Interfaces.Repositories;
+using ManagmentVeterinary.Menu;
+using ManagmentVeterinary.Repositories;
 
 
 namespace ManagmentVeterinary.Services;
@@ -8,85 +10,57 @@ namespace ManagmentVeterinary.Services;
 public class ClientService
 {
     private static readonly ClientRepository _repo = new ClientRepository();
+    private static readonly PetRepository _petRepository = new PetRepository();
 
     public static void RegisterClient()
     {
         Console.Clear();
         Console.WriteLine("\n--- Adding Client ---");
 
-        string name;
-        string phone;
-        string email;
-        string address;
+        // Nombre
+        var name = BreakBucle.GetStringOrCancel("Name");
+        if (name == null) return;
 
-        // --- Nombre ---
+        // Teléfono
+        string? phone;
         do
         {
-            Console.Write("Name: ");
-            name = Console.ReadLine()!.Trim();
-
-            if (string.IsNullOrEmpty(name))
-                Console.WriteLine("Name cannot be empty.");
-        } while (string.IsNullOrEmpty(name));
-
-        // --- Teléfono ---
-        do
-        {
-            Console.Write("Phone: ");
-            phone = Console.ReadLine()!.Trim();
-
-            if (string.IsNullOrEmpty(phone))
-            {
-                Console.WriteLine("Phone cannot be empty.");
-                continue;
-            }
+            phone = BreakBucle.GetStringOrCancel("Phone");
+            if (phone == null) return;
 
             if (!phone.All(char.IsDigit) || phone.Length < 7)
             {
                 Console.WriteLine("Invalid phone number. Must contain only digits and at least 7 numbers.");
-                phone = ""; // forzar a repetir
+                phone = null;
             }
+        } while (phone == null);
 
-        } while (string.IsNullOrEmpty(phone));
-
-        // --- Email ---
+        // Email
+        string? email;
         do
         {
-            Console.Write("Email: ");
-            email = Console.ReadLine()!.Trim();
-
-            if (string.IsNullOrEmpty(email))
-            {
-                Console.WriteLine("Email cannot be empty.");
-                continue;
-            }
+            email = BreakBucle.GetStringOrCancel("Email");
+            if (email == null) return;
 
             if (!System.Text.RegularExpressions.Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
-                Console.WriteLine(" Invalid email format. Example: example@mail.com");
-                email = ""; // forzar a repetir
+                Console.WriteLine("Invalid email format. Example: example@mail.com");
+                email = null;
             }
+        } while (email == null);
 
-        } while (string.IsNullOrEmpty(email));
+        // Dirección
+        var address = BreakBucle.GetStringOrCancel("Address");
+        if (address == null) return;
 
-        // --- Dirección ---
-        do
-        {
-            Console.Write("Address: ");
-            address = Console.ReadLine()!.Trim();
-
-            if (string.IsNullOrEmpty(address))
-                Console.WriteLine(" Address cannot be empty.");
-        } while (string.IsNullOrEmpty(address));
-
-        // --- Registro final ---
+        // Registro final
         try
         {
-            var id = Data.Database.NextClientId++;
+            var id = Database.NextClientId++;
             var client = new Client(id, name, phone, email, address);
             _repo.AddClient(client);
 
-            Console.WriteLine($"\n Client added successfully with ID: {client.IdClient}");
+            Console.WriteLine($"\nClient added successfully with ID: {client.IdClient}");
         }
         catch (Exception e)
         {
@@ -109,10 +83,12 @@ public class ClientService
         Console.Clear();
         Console.WriteLine("\n--- Update client ---");
 
-        Console.Write("Enter client ID: ");
-        if (!int.TryParse(Console.ReadLine(), out int id))
+        var idInput = BreakBucle.GetStringOrCancel("Enter client ID");
+        if (idInput == null) return;
+
+        if (!int.TryParse(idInput, out int id))
         {
-            Console.WriteLine("\nID invalid.");
+            Console.WriteLine("\nID invalid. It must be a number");
             return;
         }
 
@@ -123,55 +99,55 @@ public class ClientService
             return;
         }
 
-        Console.WriteLine("\n Data client:");
+        Console.WriteLine("\nData client:");
         Console.WriteLine(client);
 
-        Console.WriteLine("\nInser new data (press Enter to keep the current value):");
+        Console.WriteLine("\nInsert new data (or 'cancel' to exit, press Enter to keep the current value):");
 
-        Console.Write("\n New name: ");
-        string name = Console.ReadLine()!;
-        if (!string.IsNullOrWhiteSpace(name))
-            client.Name = name;
+        var newName = BreakBucle.GetStringOrCancel("New name", true);
+        if (newName == null) return;
+        if (!string.IsNullOrWhiteSpace(newName))
+            client.Name = newName;
 
-        Console.Write("\nNew phone: ");
-        string phone = Console.ReadLine()!;
-        if (!string.IsNullOrWhiteSpace(phone))
-            client.Phone = phone;
+        var newPhone = BreakBucle.GetStringOrCancel("New phone", true);
+        if (newPhone == null) return;
+        if (!string.IsNullOrWhiteSpace(newPhone))
+            client.Phone = newPhone;
 
-        Console.Write("\nNew email: ");
-        string email = Console.ReadLine()!;
-        if (!string.IsNullOrWhiteSpace(email))
-            client.Email = email;
+        var newEmail = BreakBucle.GetStringOrCancel("New email", true);
+        if (newEmail == null) return;
+        if (!string.IsNullOrWhiteSpace(newEmail))
+            client.Email = newEmail;
 
-        Console.Write("\nNew address: ");
-        string address = Console.ReadLine()!;
-        if (!string.IsNullOrWhiteSpace(address))
-            client.Address = address;
+        var newAddress = BreakBucle.GetStringOrCancel("New address", true);
+        if (newAddress == null) return;
+        if (!string.IsNullOrWhiteSpace(newAddress))
+            client.Address = newAddress;
 
         try
         {
             _repo.Update(client);
-            Console.WriteLine($"\n Client updated successfully with ID: {client.IdClient}");
+            Console.WriteLine($"\nClient updated successfully with ID: {client.IdClient}");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"\n Error to update client: {ex.Message}");
+            Console.WriteLine($"\nError updating client: {ex.Message}");
         }
     }
 
     public static void DeleteClient()
     {
         Console.WriteLine("\n--- Deleting Client ---");
-        Console.Write("Insert client ID to delete: ");
+        
+        var idInput = BreakBucle.GetStringOrCancel("Insert client ID to delete");
+        if (idInput == null) return;
 
-        // Validar entrada numérica
-        if (!int.TryParse(Console.ReadLine(), out int id))
+        if (!int.TryParse(idInput, out int id))
         {
             Console.WriteLine("\nID is invalid. Should be a number.");
             return;
         }
 
-        // Buscar cliente por ID
         var client = GetClientById(id);
         if (client == null)
         {
@@ -179,22 +155,19 @@ public class ClientService
             return;
         }
 
-        // Mostrar datos del cliente
         Console.WriteLine("\nData client to delete: ");
         Console.WriteLine(client);
 
-        // Confirmar eliminación
-        Console.Write("\nAre you sure? (y/n): ");
-        string confirm = Console.ReadLine()!.Trim().ToLower();
-        if (confirm != "y")
+        var confirm = BreakBucle.GetStringOrCancel("Are you sure? (y/n)");
+        if (confirm == null || confirm.ToLower() != "y")
         {
             Console.WriteLine("\nOperation canceled.");
             return;
         }
 
-        // Eliminar cliente
         _repo.Delete(id);
-        Console.WriteLine("\nClient deleted successfully.");
+        _petRepository.DeleteAllByClientId(id);
+        Console.WriteLine("\nClient and pets successfully removed");
     }
 
 
@@ -214,7 +187,7 @@ public class ClientService
 
         foreach (var c in clients)
         {
-            Console.WriteLine($"\n CLIENT ID: {c.IdClient}");
+            Console.WriteLine($"\n - CLIENT ID: {c.IdClient}");
             Console.WriteLine($"   Name: {c.Name}");
             Console.WriteLine($"   Email: {c.Email}");
             Console.WriteLine($"   Phone: {c.Phone}");
@@ -227,14 +200,14 @@ public class ClientService
 
             if (pets.Count == 0)
             {
-                Console.WriteLine("   No pets registered for this client.");
+                Console.WriteLine(" - No pets registered for this client");
             }
             else
             {
                 Console.WriteLine("Pets:");
                 foreach (var pet in pets)
                 {
-                    Console.WriteLine($"     - ID: {pet.Id}, Name: {pet.Name}, Species: {pet.Species}, Age: {pet.Age}");
+                    Console.WriteLine($"    - ID: {pet.Id}, Name: {pet.Name}, Species: {pet.Species}, Age: {pet.Age}");
                 }
             }
         }
@@ -245,10 +218,11 @@ public class ClientService
     public static void SearchClientById()
     {
         Console.WriteLine("\n--- Search Client by ID ---");
-        Console.Write("Enter Client ID: ");
+        
+        var idInput = BreakBucle.GetStringOrCancel("Enter Client ID");
+        if (idInput == null) return;
 
-        // Validamos que el usuario escriba un número
-        if (!int.TryParse(Console.ReadLine(), out int id))
+        if (!int.TryParse(idInput, out int id))
         {
             Console.WriteLine("Invalid ID. Please enter a numeric value.");
             return;
@@ -273,8 +247,16 @@ public class ClientService
 
     public static void AddPetToPatient()
     {
-        Console.Write("Enter Client ID: ");
-        int clientId = int.Parse(Console.ReadLine() ?? "0");
+        Console.WriteLine("\n--- Adding Pet to Patient ---");
+        
+        var idInput = BreakBucle.GetStringOrCancel("Enter Client ID");
+        if (idInput == null) return;
+
+        if (!int.TryParse(idInput, out int clientId))
+        {
+            Console.WriteLine("Invalid ID. Please enter a numeric value.");
+            return;
+        }
 
         if (!Database.Clients.ContainsKey(clientId))
         {
@@ -282,23 +264,44 @@ public class ClientService
             return;
         }
 
-        Console.Write("Pet name: ");
-        string name = Console.ReadLine() ?? "";
-        Console.Write("Pet age: ");
-        int age = int.Parse(Console.ReadLine() ?? "0");
-        Console.Write("Species: ");
-        string species = Console.ReadLine() ?? "";
-        Console.Write("Breed: ");
-        string raza = Console.ReadLine() ?? "";
-        Console.Write("Sympthom (optional): ");
-        string? symptom = Console.ReadLine();
-        Console.Write("Sexo: ");
-        string sexo = Console.ReadLine() ?? "";
+        var name = BreakBucle.GetStringOrCancel("Enter pet name");
+        if (name == null) return;
 
+        var species = BreakBucle.GetStringOrCancel("Enter species");
+        if (species == null) return;
 
-        var pet = new Pet(Database.NextMascotaId++, name, age, species, raza, symptom, clientId, sexo);
-        Database.Pets.Add(pet);
+        var breed = BreakBucle.GetStringOrCancel("Enter breed");
+        if (breed == null) return;
 
-        Console.WriteLine("Pet add succesful");
+        var ageInput = BreakBucle.GetStringOrCancel("Enter age");
+        if (ageInput == null) return;
+
+        if (!int.TryParse(ageInput, out int age) || age <= 0)
+        {
+            Console.WriteLine("Invalid age. Must be a positive number.");
+            return;
+        }
+
+        var symptom = BreakBucle.GetStringOrCancel("Enter symptoms (optional)", true);
+        if (symptom == null) return;
+
+        string? sex;
+        do
+        {
+            sex = BreakBucle.GetStringOrCancel("Enter sex (M/F)");
+            if (sex == null) return;
+            
+            sex = sex.ToUpper();
+            if (sex != "M" && sex != "F")
+            {
+                Console.WriteLine("Invalid sex. Must be 'M' or 'F'.");
+                sex = null;
+            }
+        } while (sex == null);
+
+        var pet = new Pet(Database.NextMascotaId++, name, age, species, breed, symptom, clientId, sex);
+        _petRepository.AddPet(pet);     
+
+        Console.WriteLine("\nPet added successfully!");
     }
 }

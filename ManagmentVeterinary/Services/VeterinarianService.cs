@@ -1,4 +1,5 @@
 ﻿using ManagmentVeterinary.Data;
+using ManagmentVeterinary.Menu;
 using ManagmentVeterinary.Repositories;
 
 namespace ManagmentVeterinary.Models;
@@ -12,41 +13,38 @@ public class VeterinarianService
         Console.Clear();
         Console.WriteLine("\n--- Add Veterinarian ---");
 
-        string name;
-        while (true)
-        {
-            Console.Write("Name: ");
-            name = Console.ReadLine()!;
-            if (!string.IsNullOrWhiteSpace(name)) break;
-            Console.WriteLine("Name cannot be empty.");
-        }
+       var name = BreakBucle.GetStringOrCancel("Name");
+       if (name == null) return;
 
-        string phone;
-        while (true)
-        {
-            Console.Write("Phone: ");
-            phone = Console.ReadLine()!;
-            if (!string.IsNullOrWhiteSpace(phone)) break;
-            Console.WriteLine("Phone cannot be empty.");
-        }
+       string? phone;
+       do
+       {
+           phone = BreakBucle.GetStringOrCancel("Phone");
+           if (phone == null) return;
 
-        Console.Write("Email (optional): ");
-        string? email = Console.ReadLine();
-        if (!string.IsNullOrWhiteSpace(email) && !email.Contains("@"))
-        {
-            Console.WriteLine("Invalid email format. It will be saved as empty.");
-            email = null;
-        }
+           if (!phone.All(char.IsDigit) || phone.Length < 7)
+           {
+               Console.WriteLine("Invalid phone number. Must contain only digits and at least 7 numbers.");
+               phone = null;
+           }
+       } while (phone == null);
 
-        string speciality;
-        while (true)
-        {
-            Console.Write("Speciality: ");
-            speciality = Console.ReadLine()!;
-            if (!string.IsNullOrWhiteSpace(speciality)) break;
-            Console.WriteLine("Speciality cannot be empty.");
-        }
+       string? email;
+       do
+       {
+           email = BreakBucle.GetStringOrCancel("Email");
+           if (email == null) return;
 
+           if (!email.Contains("@"))
+           {
+               Console.WriteLine("Invalid email format. It will be saved as empty.");
+               email = null;
+           }
+       } while (email == null);
+
+       var speciality = BreakBucle.GetStringOrCancel("Speciality");
+       if (speciality == null) return;
+       
 
         try
         {
@@ -113,14 +111,14 @@ public class VeterinarianService
         Console.Clear();
         Console.WriteLine("\n--- Update Veterinarian ---");
 
-        Console.Write("Enter Veterinarian ID: ");
+        var idInput = BreakBucle.GetStringOrCancel("Enter veterinarian ID");
         if (!int.TryParse(Console.ReadLine(), out int id))
         {
             Console.WriteLine("\nID invalid. It must be a number.");
             return;
         }
 
-        // 1. Usar el repositorio de Veterinario para obtener el objeto
+        // Usar el repositorio de Veterinario para obtener el objeto
         var veterinarian = _veterinarianRepository.GetById(id);
         if (veterinarian == null)
         {
@@ -136,25 +134,21 @@ public class VeterinarianService
         Console.WriteLine("\nInsert new data (press Enter to keep the current value):");
 
         // Actualizamos
-        Console.Write($"\n New name (Current: {veterinarian.Name}): ");
-        string name = Console.ReadLine()!;
+        var name = BreakBucle.GetStringOrCancel("New name", true);
         if (!string.IsNullOrWhiteSpace(name))
             veterinarian.Name = name; // Actualiza el objeto
 
-        Console.Write($"\n New phone (Current: {veterinarian.Phone}): ");
-        string phone = Console.ReadLine()!;
+        var phone = BreakBucle.GetStringOrCancel("New phone", true);
         if (!string.IsNullOrWhiteSpace(phone))
             veterinarian.Phone = phone; // Actualiza el objeto
 
-        Console.Write($"\n New email (Current: {veterinarian.Email}): ");
-        string email = Console.ReadLine()!;
+        var email = BreakBucle.GetStringOrCancel("New email", true);
         if (!string.IsNullOrWhiteSpace(email) && email.Contains("@"))
             veterinarian.Email = email;
         else if (!string.IsNullOrWhiteSpace(email) && !email.Contains("@"))
             Console.WriteLine("Invalid email format. Keeping the current value.");
 
-        Console.Write($"\n New speciality (Current: {veterinarian.Specialization}): ");
-        string speciality = Console.ReadLine()!;
+        var speciality = BreakBucle.GetStringOrCancel("New speciality", true);
         if (!string.IsNullOrWhiteSpace(speciality))
             veterinarian.Specialization = speciality; // Actualiza el objeto
 
@@ -175,7 +169,9 @@ public class VeterinarianService
         Console.Clear();
         Console.WriteLine("\n--- Delete Veterinarian ---");
         
-        Console.Write("Enter Veterinarian ID: ");
+        var idInput = BreakBucle.GetStringOrCancel("Enter veterinarian ID");
+        if (idInput == null) return;
+        
         if (!int.TryParse(Console.ReadLine(), out int id))
         {
             Console.WriteLine("\nID invalid. It must be a number.");
@@ -190,14 +186,14 @@ public class VeterinarianService
         }
         
         // Preguntamos al usuario confirmacion
-        Console.WriteLine("\nAre you sure you want to delete the following veterinarian?");
-        Console.WriteLine($"ID: {veterinarian.VeterinarianId} | Name: {veterinarian.Name} | Speciality: {veterinarian.Specialization}"); 
-    
-        Console.Write("Confirm deletion (Y/N): ");
-        if (Console.ReadLine()!.ToUpper() == "Y")
+        var confirm = BreakBucle.GetStringOrCancel("\nAre you sure you want to delete the following veterinarian?");
+        Console.WriteLine($"ID: {veterinarian.VeterinarianId} | Name: {veterinarian.Name} | Speciality: {veterinarian.Specialization}");
+
+        if (confirm != null && confirm.ToLower() == "y")
         {
             try
             {
+                // logica de eliminacion 
                 _veterinarianRepository.Delete(id); 
                 Console.WriteLine($"\n Veterinarian with ID {id} deleted successfully.");
             }

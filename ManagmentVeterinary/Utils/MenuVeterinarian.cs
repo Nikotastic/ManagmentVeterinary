@@ -39,7 +39,7 @@ public class MenuVeterinarian
                     VeterinarianService.UpdateVeterinarian();
                     break;
                 case 5:
-                    VeterinarianService. DeleteVeterinarian();
+                    VeterinarianService.DeleteVeterinarian();
                     break;
                 case 6:
                     Console.WriteLine("Exiting the Vet Menu...");

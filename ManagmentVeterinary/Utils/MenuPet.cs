@@ -15,7 +15,8 @@ public class MenuPet
                 Console.WriteLine("3. Search Pet");
                 Console.WriteLine("4. Update Pet");
                 Console.WriteLine("5. Delete Pet");
-                Console.WriteLine("6. Exit");
+                Console.WriteLine("6. Probar Servicios Veterinarios");
+                Console.WriteLine("7. Exit");
                 Console.Write("\nSelect an option: ");
 
                 if (!int.TryParse(Console.ReadLine(), out opcion))
@@ -42,12 +43,23 @@ public class MenuPet
                         PetService.DeletePet();
                         break;
                     case 6:
+                        Console.Write("\nEnter pet ID to test services: ");
+                        if (int.TryParse(Console.ReadLine(), out int petId))
+                        {
+                            PetService.TestVeterinaryService(petId);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid ID.");
+                        }
+                        break;
+                    case 7:
                         Console.WriteLine("Exiting the Pet Menu...");
                         break;
                     default:
                         Console.WriteLine("Invalid option.");
                         break;
                 }
-            } while (opcion != 6);
+            } while (opcion != 7);
         }
 }
