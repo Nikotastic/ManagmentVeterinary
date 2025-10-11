@@ -54,7 +54,7 @@ public class ClientService
         // Final record
         try
         {
-            var id = Database.NextClientId++;
+            var id = Database.GetNextClientId();
             var client = new Client(id, name, phone, email, address);
             _repo.AddClient(client);
 
@@ -298,7 +298,7 @@ public class ClientService
         } while (sex == null);
 
         // Final record 
-        var pet = new Pet(Database.NextMascotaId++, name, age, species, breed, symptom, clientId, sex);
+        var pet = new Pet(Database.GetNextPetId(), name, age, species, breed, symptom, clientId, sex);
         _petRepository.AddPet(pet);     
 
         Console.WriteLine("\nPet added successfully!");

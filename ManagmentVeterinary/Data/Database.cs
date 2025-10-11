@@ -13,10 +13,17 @@ public class Database
    
    
    // Simple id counters
-   public static int NextMascotaId = 1;
-   public static int NextClientId = 1;
-   public static int NextVeterinarianId = 1;
-   public static int NextConsultaId = 1;
+   private static int _nextPetId = 1;
+   public static int GetNextPetId() => _nextPetId++;
+   
+   private static int _nextClientId = 1;
+   public static int GetNextClientId() => _nextClientId++;
+
+   private static int _nextVeterinarianId = 1;
+   public static int GetNextVeterinarianId() => _nextVeterinarianId++;
+   
+   private static int _nextConsultationId = 1;
+   public static int GetNextConsultationId() => _nextConsultationId++;
    
    
    // creating a list with schedules

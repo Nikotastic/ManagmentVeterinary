@@ -9,7 +9,7 @@ public class PetRepository : IPetRepository
     // Methods of crud with conect the database
     public void AddPet(Pet pet)
     {
-        pet.Id = Database.NextMascotaId++;
+        pet.Id = Database.GetNextPetId(); 
         Database.Pets.Add(pet);
     }
     

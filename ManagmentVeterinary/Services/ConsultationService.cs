@@ -102,7 +102,7 @@ public class ConsultationService
         try
         {
             var consultation = new Consultation(
-                Database.NextConsultaId++,
+                Database.GetNextConsultationId(),
                 idPet,
                 idVeterinarian,
                 fullDate,

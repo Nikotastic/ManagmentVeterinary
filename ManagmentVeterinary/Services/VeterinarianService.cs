@@ -50,7 +50,7 @@ public class VeterinarianService
 
         try
         {
-            var veterinarian = new Veterinarian(Database.NextVeterinarianId++, name, phone, email, speciality);
+            var veterinarian = new Veterinarian(Database.GetNextVeterinarianId(), name, phone, email, speciality);
             _veterinarianRepository.AddVeterinarian(veterinarian);
             Console.WriteLine($"\n Veterinarian '{name}' added successfully.\n");
         }
