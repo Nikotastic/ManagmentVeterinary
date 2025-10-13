@@ -19,7 +19,7 @@ public class Vacunation : VeterinaryService
         Console.WriteLine($"Next dose scheduled for: {NextDoseDate :dd/MM/yyyy}");
         pet.SendNotification($"Vaccine {TypeOfVaccine} applied. Next dose: {NextDoseDate :dd/MM/yyyy}");
         
-        // La mascota emite un sonido durante la vacunación
+        // The pet makes a sound during vaccination
         Console.WriteLine($"The pet says: {pet.IssueSound()}");
     }
 }

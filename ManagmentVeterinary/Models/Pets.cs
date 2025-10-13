@@ -5,7 +5,7 @@ namespace ManagmentVeterinary.Models;
 // class for the pet and implements the interfaces IssueSound, INotification and IRegistrable
 public class Pet: Animal, INotification, IRegistrable
 {
-    public int Id { get; set; }
+    public int Id { get; private set; }
     public string Breed { get; set; }
     public string? Symptom { get; set; }
     public int ClientId { get; set; }
@@ -23,13 +23,14 @@ public class Pet: Animal, INotification, IRegistrable
 
     public void SendNotification(string message)
     {
-        Console.WriteLine($"[Notificación a dueño {Name}]: {message}");
+        Console.WriteLine($"[Owner notification {Name}]: {message}");
     }
 
     public override string IssueSound()
     {
-        if (Species.ToLower().Contains("Dog")) return "Guau";
-        if (Species.ToLower().Contains("Cat")) return "Miau";
+        var sp = Species.ToLowerInvariant();
+        if (sp.Contains("perro") || sp.Contains("dog")) return "Guau";
+        if (sp.Contains("gato") || sp.Contains("cat")) return "Miau";
         return "Sound";
     }
     public void Register()
@@ -40,5 +41,10 @@ public class Pet: Animal, INotification, IRegistrable
     public override string ToString()
     {
         return $"Id: {Id}, Name: {Name}, Age: {Age}, Species: {Species}, Breed: {Breed}, Symptom: {Symptom}, Sexo: {Sexo}, ClientId: {ClientId}";
+    }
+    
+    public void SetId(int id)
+    {
+        Id = id;
     }
 }

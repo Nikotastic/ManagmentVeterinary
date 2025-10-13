@@ -4,7 +4,7 @@ namespace ManagmentVeterinary.Models;
 // class for the client and implements the interfaces INotification and IRegistrable
 public class Client: Person, INotification, IRegistrable
 {
-    public int IdClient { get; set; }
+    public int IdClient { get; private set; }
     public string Address { get; set; }
     
     public Client(int idClient, string name, string phone, string? email, string address) : base( name, phone, email)
