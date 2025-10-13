@@ -18,5 +18,5 @@ public abstract class VeterinaryService
     }
 
     // Método abstracto que debe ser implementado por las subclases
-    public abstract void Attend(Pet mascota);
+    public abstract void Attend(Pet pet);
 }
